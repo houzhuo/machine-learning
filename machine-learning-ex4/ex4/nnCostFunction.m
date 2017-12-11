@@ -62,23 +62,52 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+y_matrix = eye(num_labels)(y,:) 
 
 
 
+a1 = [ones(m,1),X]
+z2 = a1*Theta1'
+a2 = sigmoid(z2)
+a2 = [ones(size(a2,1),1),a2]
+z3 = a2*Theta2'
+a3 = sigmoid(z3)
+
+#temp = theta;
+
+#temp(1) = 0;
+
+J = trace((-1/m)*((y_matrix'*log(a3)+(1-y_matrix)'*log(1-a3))));
+
+Theta1(:,1) = 0;
+Theta2(:,1) = 0;# this is  a matrix operation!!! NOT Theta(1)= 0 NO!
+J_regular = (lambda/(2*m))*(trace(Theta1'*Theta1) + trace(Theta2'*Theta2));
+
+J = J + J_regular;
+
+
+#y_matrix=5000*10
+#y = 5000*1
+#a1 = 5000*401
+#z2 = 5000*401*401*25=5000*25
+#a3 = 5000*10
+
+#theta1 = 25*401
+#theta2 = 10*26
 
 
 
+d3 = a3-y_matrix #5000*10
+d2 = d3*Theta2(:,2:end).*sigmoidGradient(z2)#d2 is tricky. It uses the (:,2:end) columns of Theta2,
+#d2 is the product of d3 and Theta2(no bias), then element-wise scaled by sigmoid gradient of z2. 5000*10*10*25.*5000*25
 
 
+Delta1=d2'*a1#Delta1 is the product of d2 and a1. The size is (h x m) ⋅ (m x n) --> (h x n)  25*5000 * 5000*401
 
+Delta2=d3'*a2#Delta2 is the product of d3 and a2. The size is (r x m) ⋅ (m x [h+1]) --> (r x [h+1])   10*5000 * 5000*26
 
-
-
-
-
-
-
-
+Theta1_grad = (1/m)*Delta1 + (lambda/m)*Theta1
+Theta2_grad = (1/m)*Delta2 + (lambda/m)*Theta2
 
 % -------------------------------------------------------------
 
