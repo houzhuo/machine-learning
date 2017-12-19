@@ -20,9 +20,9 @@ S = zeros(n);
 %       number of examples).
 %
 
+Sigma = (1/m) * X' * X;#X is size (m x n), so "X transpose X" and U are both size n x n
 
-
-
+[U,S,V] = svd(Sigma);
 
 
 

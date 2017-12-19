@@ -15,12 +15,12 @@ Z = zeros(size(X, 1), K);
 %               For the i-th example X(i,:), the projection on to the k-th 
 %               eigenvector is given as follows:
 %                    x = X(i, :)';
-%                    projection_k = x' * U(:, k);
+%                  % projection_k = x' * U(:, 1:k);
 %
 
 
-
-
+#X is size (m x n), and the portion of U is (n x K). Z is size (m x K).
+Z = X * U(:, 1:K);
 % =============================================================
 
 end
