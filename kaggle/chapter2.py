@@ -117,3 +117,95 @@ gbc_predict = gbc.predict(X_test)
 
 print classification_report(y_test,rfc_predict)#其余三个指标
 print classification_report(y_test,gbc_predict,target_names = ['died','survived'])#其余三个指标
+
+
+#=======================================Regression==================================
+from sklearn.datasets import load_boston
+boston = load_boston()
+from sklearn.cross_validation import train_test_split
+import numpy as np
+X=boston.data
+y=boston.target
+X_train,X_test,y_train,y_test = train_test_split(X,y,test_size = 0.25,random_state = 33)
+print "max target value is",np.max(boston.target)
+from sklearn.preprocessing import StandardScaler
+#X和房价y都要标准化
+ss_X = StandardScaler()
+ss_y = StandardScaler()
+
+X_train = ss_X.fit_transform(X_train)
+X_test = ss_X.transform(X_test)
+y_train = ss_y.fit_transform(y_train)
+y_test = ss_y.transform(y_test)
+
+from sklearn.linear_model import LinearRegression
+lr = LinearRegression()
+lr.fit(X_train,y_train)
+lr_y_predict = lr.predict(X_test)
+
+from sklearn.linear_model import SGDRegressor
+sgdr = SGDRegressor()
+sgdr.fit(X_train,y_train)
+sgdr_y_predict = sgdr.predict(X_test)
+
+print 'The value of default measurement of LinearRegession is',lr.score(X_test,y_test)
+from sklearn.metrics import r2_score,mean_squared_error,mean_absolute_error
+
+print 'The value of R-squared of LinearRegession is',r2_score(y_test,lr_y_predict)
+print 'The mean squared error of LinearRegession is',mean_squared_error(y_test,lr_y_predict)
+print 'The mean absolute error of LinearRegession is',mean_absolute_error(y_test,lr_y_predict)
+
+#================================================================================
+
+from sklearn.svm import SVR
+linear_svr = SVR(kernel='linear')
+linear_svr.fit(X_train,y_train)
+linear_svr_y_predict = linear_svr.predict(X_test)
+
+poly_svr = SVR(kernel='poly')
+poly_svr.fit(X_train,y_train)
+poly_svr_y_predict = poly_svr.predict(X_test)
+
+rbf_svr = SVR(kernel='rbf')
+rbf_svr.fit(X_train,y_train)
+rbf_svr_y_predict = rbf_svr.predict(X_test)
+
+
+print 'The value of default measurement of SVR is',linear_svr.score(X_test,y_test)
+from sklearn.metrics import r2_score,mean_squared_error,mean_absolute_error
+
+print 'The value of R-squared of linear_svr is',r2_score(y_test,linear_svr_y_predict)
+print 'The mean squared error of linear_svr is',mean_squared_error(y_test,linear_svr_y_predict)
+print 'The mean absolute error of linear_svr is',mean_absolute_error(y_test,linear_svr_y_predict)
+
+
+
+#============================================regression tree==========
+#树模型不需要归一化，对比于决策树，回归树是离散的，决策树每个节点返回的是概率，而回归树返回的是具体的值
+from sklearn.tree import DecisionTreeRegressor
+dtr = DecisionTreeRegressor()
+dtr.fit(X_train,y_train)
+dtr_y_predict = dtr.predict(X_test)
+
+print 'The value of default measurement of treeRegession is',dtr.score(X_test,y_test)
+
+#集成模型
+from sklearn.ensemble import RandomForestRegressor,ExtraTreesRegressor,GradientBoostingRegressor
+
+rfr = RandomForestRegressor()
+rfr.fit(X_train,y_train)
+rfr_y_predict = rfr.predict(X_test)
+
+etr = RandomForestRegressor()
+etr.fit(X_train,y_train)
+etr_y_predict = etr.predict(X_test)
+
+gbr = RandomForestRegressor()
+gbr.fit(X_train,y_train)
+gbr_y_predict = gbr.predict(X_test)
+
+
+
+print 'The value of default measurement of rfr is',rfr.score(X_test,y_test)
+print 'The value of default measurement of etr is',etr.score(X_test,y_test)
+print 'The value of default measurement of gbr is',gbr.score(X_test,y_test)
